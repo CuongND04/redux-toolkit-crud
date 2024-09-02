@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { readAllUsers } from "../features/userSlice";
+import { deleteUser, readAllUsers } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "./CustomModal";
 import { Link } from "react-router-dom";
@@ -47,9 +47,14 @@ function Read() {
               <Link to={`/edit/${user.id}`} className="btn btn-warning me-2">
                 Edit
               </Link>
-              <a href="#" className="btn btn-danger">
+              <button
+                onClick={() => {
+                  dispatch(deleteUser(user.id));
+                }}
+                className="btn btn-danger"
+              >
                 Delete
-              </a>
+              </button>
             </div>
           </div>
         ))}
