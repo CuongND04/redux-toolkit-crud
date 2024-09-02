@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { readAllUsers } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import CustomModal from "./CustomModal";
 
 function Read() {
   const dispatch = useDispatch();
+  const [selectedId, setSelectedId] = useState(null);
+  const [isPopup, setPopup] = useState(false);
   useEffect(() => {
     dispatch(readAllUsers());
   }, []);
+  const viewDetailHandler = (id) => {
+    setPopup(true);
+    setSelectedId(id);
+  };
   const { users, loading, error, searchData } = useSelector(
     (state) => state.user
   ); // lay user slice
@@ -17,6 +24,7 @@ function Read() {
   return (
     <>
       <h2>Danh sách Users</h2>
+      {isPopup && <CustomModal id={selectedId} setPopup={setPopup} />}
       {users &&
         users.map((user) => (
           <div class="card my-2">
@@ -28,11 +36,18 @@ function Read() {
               <p class="card-text">
                 {user.age} - {user.gender}
               </p>
-              <a href="#" class="card-link">
-                Card link
+              <a
+                href="#"
+                class="btn btn-success me-2"
+                onClick={() => viewDetailHandler(user.id)}
+              >
+                View
               </a>
-              <a href="#" class="card-link">
-                Another link
+              <a href="#" class="btn btn-warning me-2">
+                Edit
+              </a>
+              <a href="#" class="btn btn-danger">
+                Delete
               </a>
             </div>
           </div>
