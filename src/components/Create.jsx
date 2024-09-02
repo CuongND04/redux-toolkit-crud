@@ -30,7 +30,7 @@ function Create() {
           id="name"
           placeholder="Enter name"
           name="name"
-          value = {user.name}
+          value = {user.name || ""}
           onChange={inputChangeHandler}
         />
       </div>
@@ -44,7 +44,7 @@ function Create() {
           id="email"
           placeholder="Enter email"
           name="email"
-          value = {user.email}
+          value = {user.email || ""}
           onChange={inputChangeHandler}
         />
       </div>
@@ -58,7 +58,7 @@ function Create() {
           id="age"
           placeholder="Enter Age"
           name="age"
-          value = {user.age}
+          value = {user.age || ""}
           onChange={inputChangeHandler}
         />
       </div>
@@ -72,7 +72,7 @@ function Create() {
           id="radio1"
           name="gender"
           value="male"
-          checked = {user.gender === 'male'}
+          checked = {user.gender === 'male' || ""}
           onChange={inputChangeHandler}
         />
         <label className="form-check-label" htmlFor="radio1">
@@ -86,7 +86,7 @@ function Create() {
           id="radio2"
           name="gender"
           value="female"
-          checked = {user.gender === 'female'}
+          checked = {user.gender === 'female' || ""}
           onChange={inputChangeHandler}
         />
 

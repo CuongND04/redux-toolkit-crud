@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+
+// tạo user mới
 export const createUser = createAsyncThunk(
   "createUser",
   async (data, { rejectWithValue }) => {
@@ -20,7 +22,24 @@ export const createUser = createAsyncThunk(
     }
   }
 );
-export const userSlice = createSlice({
+
+// lấy ra các user
+export const readAllUsers = createAsyncThunk(
+  "readAllUsers",
+  async (args, { rejectWithValue }) => {
+    const response = await fetch(
+      "https://66d577d6f5859a7042662b3e.mockapi.io/user",
+    );
+    try {
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+const userSlice = createSlice({
   name:"userSlice",
   initialState : {
     users:[],
@@ -45,6 +64,19 @@ export const userSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(readAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(readAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(readAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   }
 })
+
+export default userSlice.reducer;
