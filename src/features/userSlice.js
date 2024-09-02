@@ -85,8 +85,13 @@ const userSlice = createSlice({
     users: [],
     loading: false,
     error: null,
+    searchData: "",
   },
-  reducers: {},
+  reducers: {
+    searchUser: (state, action) => {
+      state.searchData = action.payload; //truyen payload vao cap nhap searchData
+    },
+  },
   extraReducers: (builder) => {
     builder
       // đang chờ
@@ -148,3 +153,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { searchUser } = userSlice.actions;
