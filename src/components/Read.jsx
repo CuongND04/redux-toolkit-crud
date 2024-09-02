@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { readAllUsers } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "./CustomModal";
+import { Link } from "react-router-dom";
 
 function Read() {
   const dispatch = useDispatch();
@@ -27,26 +28,26 @@ function Read() {
       {isPopup && <CustomModal id={selectedId} setPopup={setPopup} />}
       {users &&
         users.map((user) => (
-          <div class="card my-2">
-            <div class="card-body">
-              <h5 class="card-title">{user.name}</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">
+          <div key={user.id} className="card my-2">
+            <div className="card-body">
+              <h5 className="card-title">{user.name}</h5>
+              <h6 className="card-subtitle mb-2 text-body-secondary">
                 {user.email}
               </h6>
-              <p class="card-text">
+              <p className="card-text">
                 {user.age} - {user.gender}
               </p>
               <a
                 href="#"
-                class="btn btn-success me-2"
+                className="btn btn-success me-2"
                 onClick={() => viewDetailHandler(user.id)}
               >
                 View
               </a>
-              <a href="#" class="btn btn-warning me-2">
+              <Link to={`/edit/${user.id}`} className="btn btn-warning me-2">
                 Edit
-              </a>
-              <a href="#" class="btn btn-danger">
+              </Link>
+              <a href="#" className="btn btn-danger">
                 Delete
               </a>
             </div>

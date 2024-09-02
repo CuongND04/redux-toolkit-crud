@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // tạo user mới
 export const createUser = createAsyncThunk(
@@ -28,7 +28,29 @@ export const readAllUsers = createAsyncThunk(
   "readAllUsers",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://66d577d6f5859a7042662b3e.mockapi.io/user",
+      "https://66d577d6f5859a7042662b3e.mockapi.io/user"
+    );
+    try {
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+// cập nhật user
+export const updateUser = createAsyncThunk(
+  "updateUser",
+  async (data, { rejectWithValue }) => {
+    const response = await fetch(
+      `https://66d577d6f5859a7042662b3e.mockapi.io/user/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
     );
     try {
       const json = await response.json();
@@ -40,18 +62,16 @@ export const readAllUsers = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name:"userSlice",
-  initialState : {
-    users:[],
+  name: "userSlice",
+  initialState: {
+    users: [],
     loading: false,
-    error:null
+    error: null,
   },
-  reducers:{
-  }
-  ,
+  reducers: {},
   extraReducers: (builder) => {
     builder
-    // đang chờ
+      // đang chờ
       .addCase(createUser.pending, (state) => {
         state.loading = true;
       })
@@ -75,8 +95,22 @@ const userSlice = createSlice({
       .addCase(readAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        // user nào có id trùng với payload.id thì được cập nhật còn không thì giữ nguyên
+        state.users = state.users.map((us) =>
+          us.id === action.payload.id ? action.payload : us
+        );
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
-  }
-})
+  },
+});
 
 export default userSlice.reducer;
